@@ -1,40 +1,32 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(BIN_NAME qml-demo)
-project(${BIN_NAME} CXX)
+project(qml-demo VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(BIN_NAME qml-app)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
+find_package(Qt6 COMPONENTS Quick REQUIRED)
 
-if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-endif ()
-
-find_package(PkgConfig REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Quick)
-#pkg_search_module(XCB REQUIRED xcb)
-
-file(GLOB_RECURSE SRCS
-    "src/*.h"
-    "src/*.cpp"
-    "src/*.qrc"
+qt_add_executable(${BIN_NAME}
+    src/main.cpp
 )
 
-add_executable(${BIN_NAME} ${SRCS})
-
-target_include_directories(${BIN_NAME} PUBLIC
-    Qt6::Core
-    Qt6::Quick
+qt_add_qml_module(${BIN_NAME}
+    URI Main
+    VERSION 1.0
+    QML_FILES src/main.qml
 )
 
-target_link_libraries(${BIN_NAME} PRIVATE
-    Qt6::Core
-    Qt6::Quick
+set_target_properties(${BIN_NAME} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
 )
+
+target_compile_definitions(${BIN_NAME}
+    PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_link_libraries(${BIN_NAME}
+    PRIVATE Qt::Quick)
