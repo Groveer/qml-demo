@@ -15,7 +15,17 @@ qt_add_executable(${BIN_NAME}
 qt_add_qml_module(${BIN_NAME}
     URI Main
     VERSION 1.0
-    QML_FILES src/main.qml
+    QML_FILES
+        ui/main.qml
+        ui/window.qml
+        ui/input.qml
+        ui/animations.qml
+        ui/customtype.qml
+        ui/MessageLabel.qml
+        ui/AlarmDelegate.qml
+        ui/AlarmDialog.qml
+        ui/AlarmModel.qml
+        ui/TumblerDelegate.qml
 )
 
 set_target_properties(${BIN_NAME} PROPERTIES
