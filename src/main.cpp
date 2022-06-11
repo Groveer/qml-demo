@@ -3,8 +3,8 @@
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/Main/ui/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
